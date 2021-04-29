@@ -19,9 +19,14 @@ class Game {
 
   registerEvents() {
     const _this = this;
+    let clicked = 0;
     const getKey = function(event) {
       if(_this.currentSymbol.textContent.charCodeAt(0) === event.key.charCodeAt(0)) {
+        clicked = 1;
         return _this.success();
+      }
+      if(clicked === 0) {
+        return setTimeout(_this.fail, 2000);
       }
       return _this.fail();
     }
@@ -52,7 +57,6 @@ class Game {
 
   setNewWord() {
     const word = this.getWord();
-
     this.renderWord(word);
   }
 
