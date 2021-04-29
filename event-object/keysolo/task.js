@@ -9,6 +9,7 @@ class Game {
     this.reset();
 
     this.registerEvents();
+    //this.timeoutId = null;
   }
 
   reset() {
@@ -19,14 +20,11 @@ class Game {
 
   registerEvents() {
     const _this = this;
-    let clicked = 0;
     const getKey = function(event) {
-      if(_this.currentSymbol.textContent.charCodeAt(0) === event.key.charCodeAt(0)) {
-        clicked = 1;
+      //clearTimeout(_this.timeoutId);
+      //_this.timeoutId = null;
+      if(_this.currentSymbol.textContent.toUpperCase() === String.fromCodePoint(event.keyCode)) {
         return _this.success();
-      }
-      if(clicked === 0) {
-        return setTimeout(_this.fail, 2000);
       }
       return _this.fail();
     }
@@ -62,8 +60,8 @@ class Game {
 
   getWord() {
     const words = [
-        'bob',
-        'awesome',
+        'Bob and boy',
+        'я люблю kitkat',
         'netology',
         'hello',
         'kitty',
@@ -87,10 +85,9 @@ class Game {
       )
       .join('');
     this.wordElement.innerHTML = html;
-
     this.currentSymbol = this.wordElement.querySelector('.symbol_current');
+    //this.timeoutId = setTimeout(this.fail, 2000);
   }
 }
-
 new Game(document.getElementById('game'))
 
