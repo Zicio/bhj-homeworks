@@ -5,11 +5,13 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.time = container.querySelector('.status__time');
 
     this.reset();
-
+    this.start();
     this.registerEvents();
-    //this.timeoutId = null;
+
+    this.timeId = null;
   }
 
   reset() {
@@ -21,8 +23,6 @@ class Game {
   registerEvents() {
     const _this = this;
     const getKey = function(event) {
-      //clearTimeout(_this.timeoutId);
-      //_this.timeoutId = null;
       if(_this.currentSymbol.textContent.toUpperCase() === String.fromCodePoint(event.keyCode)) {
         return _this.success();
       }
@@ -39,6 +39,7 @@ class Game {
     }
 
     if (++this.winsElement.textContent === 10) {
+      this.stop();
       alert('Победа!');
       this.reset();
     }
@@ -47,6 +48,7 @@ class Game {
 
   fail() {
     if (++this.lossElement.textContent === 5) {
+      this.stop();
       alert('Вы проиграли!');
       this.reset();
     }
@@ -61,7 +63,6 @@ class Game {
   getWord() {
     const words = [
         'Bob and boy',
-        'я люблю kitkat',
         'netology',
         'hello',
         'kitty',
@@ -73,8 +74,27 @@ class Game {
         'javascript'
       ],
       index = Math.floor(Math.random() * words.length);
-
     return words[index];
+  }
+
+  start() {
+    const _this = this;
+    this.timeId = setInterval(function() {
+      _this.time.textContent -= 1;
+      if ( +_this.time.textContent === 0) {
+      _this.stop();
+      alert('Вы проиграли!');
+      _this.reset();
+      _this.setNewWord();
+      }
+    }, 1000);
+  }
+
+  stop() {
+    if(this.timerId) {
+      clearInterval(this.timerId);
+      this.timerId = null;
+    }
   }
 
   renderWord(word) {
@@ -85,9 +105,9 @@ class Game {
       )
       .join('');
     this.wordElement.innerHTML = html;
+    this.time.textContent = this.wordElement.textContent.length;
     this.currentSymbol = this.wordElement.querySelector('.symbol_current');
-    //this.timeoutId = setTimeout(this.fail, 2000);
   }
 }
-new Game(document.getElementById('game'))
+new Game(document.getElementById('game'));
 
