@@ -9,6 +9,6 @@ for (let i = 0; i < links.length; i++) {
     links[i].addEventListener('click', (event) => {
         event.preventDefault();
         links[i].closest('ul.dropdown__list').classList.remove('dropdown__list_active');
-        links[i].closest('div.dropdown').querySelector('div.dropdown__value').textContent = links[i].textContent.replace(/[\n\s]/g, '');
+        links[i].closest('div.dropdown').querySelector('div.dropdown__value').textContent = links[i].textContent;
     })
 }

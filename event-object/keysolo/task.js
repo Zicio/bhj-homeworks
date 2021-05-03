@@ -5,13 +5,24 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.button = container.querySelector('button.button');
     this.time = container.querySelector('.status__time');
 
-    this.reset();
     this.start();
     this.registerEvents();
 
-    this.timeId = null;
+    this.timerId = null;
+  }
+  
+  start() {
+    const _this = this;
+    const startGo = function(event) {
+      _this.button.setAttribute('disabled', 'disabled');
+      _this.button.textContent = 'Сыграть заново';
+      _this.reset();
+      _this.startTimer();
+    }
+    this.button.addEventListener('click', startGo);
   }
 
   reset() {
@@ -37,22 +48,27 @@ class Game {
     if (this.currentSymbol !== null) {
       return;
     }
-
     if (++this.winsElement.textContent === 10) {
-      this.stop();
+      this.stopTimer();
       alert('Победа!');
-      this.reset();
+      this.playAgain();
     }
-    this.setNewWord();
+    else {
+      this.setNewWord();
+    }
   }
 
   fail() {
+    this.stopTimer();
     if (++this.lossElement.textContent === 5) {
-      this.stop();
+      this.stopTimer();
       alert('Вы проиграли!');
-      this.reset();
+      this.playAgain();
     }
-    this.setNewWord();
+    else {
+      this.setNewWord();
+      this.startTimer();
+    }
   }
 
   setNewWord() {
@@ -77,20 +93,18 @@ class Game {
     return words[index];
   }
 
-  start() {
+  startTimer() {
     const _this = this;
-    this.timeId = setInterval(function() {
+    this.timerId = setInterval(function() {
       _this.time.textContent -= 1;
       if ( +_this.time.textContent === 0) {
-      _this.stop();
-      alert('Вы проиграли!');
-      _this.reset();
-      _this.setNewWord();
+      alert('Время вышло');
+      _this.fail();
       }
     }, 1000);
   }
 
-  stop() {
+  stopTimer() {
     if(this.timerId) {
       clearInterval(this.timerId);
       this.timerId = null;
@@ -107,6 +121,10 @@ class Game {
     this.wordElement.innerHTML = html;
     this.time.textContent = this.wordElement.textContent.length;
     this.currentSymbol = this.wordElement.querySelector('.symbol_current');
+  }
+
+  playAgain() {
+    this.button.removeAttribute('disabled');
   }
 }
 new Game(document.getElementById('game'));
