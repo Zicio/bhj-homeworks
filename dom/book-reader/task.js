@@ -5,17 +5,18 @@ const colorControl = book.querySelectorAll('.book__control-color');
 const backgroundControl = book.querySelectorAll('.book__control-background');
 const color = book.querySelectorAll('.color');
 
-for (let i = 0; i < fontSize.length; i++) {
-    fontSize[i].addEventListener('click', (event) => {
+for (let element of fontSize) {
+    element.addEventListener('click', (event) => {
         event.preventDefault();
         book.querySelector('.font-size_active').classList.remove('font-size_active');
-        fontSize[i].classList.add('font-size_active');
-        if (fontSize[i].matches('.font-size_small')) {
+        element.classList.add('font-size_active');
+
+        if (element.matches('.font-size_small')) {
             book.classList.remove('book_fs-big');
             book.classList.add('book_fs-small');
             return;
         }
-        if (fontSize[i].matches('.font-size_big')) {
+        if (element.matches('.font-size_big')) {
             book.classList.remove('book_fs-small');
             book.classList.add('book_fs-big');
             return;
@@ -25,26 +26,18 @@ for (let i = 0; i < fontSize.length; i++) {
         return;
     })
 }
-for (let i = 0; i < color.length; i++) {
-    color[i].addEventListener('click', (event) => {
+
+for (let element of color) {
+    element.addEventListener('click', (event) => {
         event.preventDefault();
-        color[i].closest('.book__control').querySelector('.color_active').classList.remove('color_active');
-        color[i].classList.add('color_active');
-        ///////////////////////////////////////////////
-        if (color[i].matches('.text_color_black')) {
-            book.classList.remove('book_color-gray');
-            book.classList.remove('book_color-whitesmoke');
-            book.classList.add('book_color-black');
-            return;
+        element.closest('.book__control').querySelector('.color_active').classList.remove('color_active');
+        element.classList.add('color_active');
+
+        if (element.closest('div.book__control_color')) {
+            book.style.color = element.getAttribute('data-text-color');
         }
-        if (color[i].matches('.font-size_big')) {
-            book.classList.remove('book_fs-small');
-            book.classList.add('book_fs-big');
-            return;
+        if (element.closest('div.book__control_background')) {
+            book.style.background = element.getAttribute('data-bg-color');
         }
-        book.classList.remove('book_fs-small');
-        book.classList.remove('book_fs-big');
-        return;
-/////////////////////////////////////////////////////////
     });
 }
