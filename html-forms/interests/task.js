@@ -1,23 +1,34 @@
 'use strict'
-const main = document.querySelector('.interests_main');
-const checkbox = main.querySelectorAll('.interest__check');
-const check = (element) => {
-    if (element.closest('.interests_active')) {
-        const parent = element.closest('.interests_active').closest('.interest').querySelector('.interest__check');
-        const siblings = element.closest('.interests_active').querySelectorAll('.interest__check');
+const checkbox = document.querySelectorAll('.interest__check');
+const check = (elem) => {
+    if (elem.closest('.interests_active')) {
+        const parent = elem.closest('.interests_active').closest('.interest').querySelector('.interest__check');
+        const siblings = elem.closest('.interests_active').querySelectorAll('.interest__check');
         if(Array.from(siblings).every(elem => elem.checked === true)) {
             parent.checked = true;
-        } 
+            parent.indeterminate = false;
+        }
+        else if(Array.from(siblings).every(elem => elem.checked === false)) {
+            parent.indeterminate = false;
+            parent.checked = false;
+        }
+        else {
+            parent.indeterminate = true;
+        }
+
+        if (parent.closest('.interests_active')) {
+            const grandParent = parent.closest('.interests_active');
+            check(grandParent);
+        }
     }
 }
 
 for (const element of checkbox) {
     element.addEventListener('change', () => {
-        if (element.closest('.interests').classList.contains('interests_main')) {
-            let checkIn = element.closest('.interest').querySelector('.interests_active').querySelectorAll('.interest__check');
-            for (let i = 0; i < checkIn.length; i++) {
-                element.checked ? checkIn[i].checked = true : checkIn[i].checked = false;
-            }
+        const label = element.closest('.interest');
+        const children = label.querySelectorAll('.interest__check');
+        for (let i = 0; i < children.length; i++) {
+            element.checked ? children[i].checked = true : children[i].checked = false;
         }
         check(element);
     })

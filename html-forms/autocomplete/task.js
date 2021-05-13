@@ -1,3 +1,4 @@
+'use strict'
 class Autocomplete {
   constructor( container ) {
     this.container = container;
@@ -6,6 +7,7 @@ class Autocomplete {
     this.list = container.querySelector( '.autocomplete__list' );
     this.valueContainer = container.querySelector( '.autocomplete__value' );
     this.valueElement = container.querySelector( '.autocomplete__text-content' );
+    this.arr = [];
 
     this.registerEvents();
   }
@@ -68,6 +70,27 @@ class Autocomplete {
   }
 
   getMatches( text ) {
+    console.log(text);
+    this.searchInput.addEventListener('input', (e) => {
+      this.arr = [];
+      console.log(this.input.options);
+      //console.log(this.input.options[0]);
+      //console.log(this.input.options[0].text);
+      //console.log(this.input.options[0].text.includes('М'));
+      //console.log(this.input.options[0].value);
+      for (const option of this.input.options) {
+        if (option.text.includes(text)) {
+          this.arr.push(
+            {
+              text: option.text,
+              value: option.value,
+            }
+          )
+          console.log(this.arr);
+        }
+      }
+    })
+    return this.arr;
     /*
       TODO: этот метод нужно дописать
       text - фраза, которую вводят в поле поиска
@@ -81,12 +104,12 @@ class Autocomplete {
         value: 'Содержимое атрибута value'
       }
     */
-    return [
+    /*return [
       {
         text: 'Чубакка',
         value: '1'
       }
-    ];
+    ];*/
   }
 }
 
