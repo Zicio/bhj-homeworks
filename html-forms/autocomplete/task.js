@@ -7,7 +7,6 @@ class Autocomplete {
     this.list = container.querySelector( '.autocomplete__list' );
     this.valueContainer = container.querySelector( '.autocomplete__value' );
     this.valueElement = container.querySelector( '.autocomplete__text-content' );
-    this.arr = [];
 
     this.registerEvents();
   }
@@ -69,20 +68,18 @@ class Autocomplete {
   }
 
   getMatches( text ) {
-    this.searchInput.addEventListener('input', (e) => {
-      this.arr = [];
-      for (const option of this.input.options) {
-        if (option.text.includes(text)) {
-          this.arr.push(
-            {
-              text: option.text,
-              value: option.value
-            }
-          )
-        }
+    const arr = [];
+    for (const option of this.input.options) {
+      if (option.text.includes(text)) {
+        arr.push(
+          {
+            text: option.text,
+            value: option.value
+          }
+        )
       }
-    })
-    return this.arr;
+    }
+    return arr;
   }
 }
 
