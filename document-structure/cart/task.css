@@ -1,6 +1,11 @@
 body {
   font-family: Arial;
 }
+
+.cart {
+  visibility: hidden;
+}
+
 .cart__products {
   display: flex;
   justify-content: center;
@@ -26,6 +31,14 @@ body {
   height: 100px;
   object-fit: contain;
 }
+
+.cart__product-delete {
+  color: red;
+  font-size: 30px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .product {
   display: flex;
   flex-wrap: wrap;

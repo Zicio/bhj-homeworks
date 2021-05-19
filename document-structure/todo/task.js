@@ -5,30 +5,39 @@ const button = document.getElementById('tasks__add');
 const tasksList = document.getElementById('tasks__list');
 let task = null;
 const arr = [];
+let id = 1;
 
 //Функция добавления задачи
 const addTask = (el) => {
     tasksList.insertAdjacentHTML('beforeend',
-        '<div class="task"><a href="#" class="task__remove">&times;</a></div>');
+        '<div class="task" data-id=""><a href="#" class="task__remove">&times;</a></div>');
     const newTaskTittle = document.createElement('div');
     newTaskTittle.classList.add('task__title');
     newTaskTittle.innerText = `${el.value.trim()}`;
     task = tasksList.querySelectorAll('.task');
+    task[task.length - 1].dataset.id = id;
+    id++;
     task[task.length - 1].append(newTaskTittle);
     arr.push(
         {
-            id: task.length,
+            id: task[task.length - 1].dataset.id,
             value: el.value
         }
     )
-    const saveArr = JSON.stringify(arr);
-    localStorage.setItem("mySave", saveArr);
+    save();
 }
+
+//Функция сохранения данных
+const save = () => {
+    const saveArr = JSON.stringify(arr);
+    localStorage.setItem('mySave', saveArr);
+}
+
 
 //Проверка Window.localStorage на наличие сохраненных данных 
 if (localStorage.getItem('mySave')) {
-    const save = JSON.parse(localStorage.getItem('mySave'));
-    save.forEach(element => {addTask(element)});
+    const mySave = JSON.parse(localStorage.getItem('mySave'));
+    mySave.forEach(element => {addTask(element)});
 }
 
 //Обработчик Инпута
@@ -52,5 +61,12 @@ tasksList.addEventListener('click', (e) => {
     if (!e.target.classList.contains('task__remove')) {
       return;
     }
+    for (let i = 0; i < arr.length; i++) {
+        if (+arr[i].id === +e.target.closest('.task').dataset.id) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
     e.target.closest('.task').remove();
+    save();
   });
