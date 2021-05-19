@@ -2,7 +2,6 @@
 const cart = document.querySelector('.cart');
 const products = document.querySelector('.products');
 const cartProducts = document.querySelector('.cart__products');
-//задать вопрос про переопределение переменных
 let addedProducts = cartProducts.querySelectorAll('.cart__product');
 const arr = [];
 let timerId = null;
@@ -10,8 +9,8 @@ let timerId = null;
 //Функция показа корзины
 const visibleCart = () => {
     if(addedProducts.length) {
-        cart.style.visibility = 'visible';
-        return;
+        return cart.style.visibility = 'visible';
+        
     }
     cart.style.visibility = 'hidden';
 }
@@ -79,19 +78,31 @@ const moveImage = (e, parent) => {
     const cartProduct = cartProducts.querySelectorAll('.cart__product');
     let imageInCart = null;
     for (const element of cartProduct) {
-        if (!parent.getAttribute('data-id') === !element.getAttribute('data-id')) {
+        if (+parent.getAttribute('data-id') === +element.getAttribute('data-id')) {
             imageInCart = element.querySelector('.cart__product-image');
             break;
         } 
     }
     const imageInCartCoord = imageInCart.getBoundingClientRect();
-    const cloneImageCoord = cloneImage.getBoundingClientRect();
     timerId = setInterval(() => {
-        //const differenceY = imageCoord.y - imageInCartCoord.y;
-        //const differenceX = imageInCartCoord.x - imageCoord.x;
-        cloneImageCoord.top = imageCoord.top - '10px';
-    }, 1000)
+        const cloneImageCoord = cloneImage.getBoundingClientRect();
+        const differenceY = cloneImageCoord.top - imageInCartCoord.top;
+        const differenceX = imageInCartCoord.left - cloneImageCoord.left;
+        if (differenceY > 5 && differenceX > 5) {
+            cloneImage.style.top = cloneImageCoord.top - (differenceY / 10) + 'px';
+            cloneImage.style.left = cloneImageCoord.left + (differenceX / 10) + 'px';
+            return;
+        }
+        stop(cloneImage);
+    }, 5)
+    
+}
 
+//Функция остановки таймера
+const stop = (cloneImage) => {
+    clearTimeout(timerId);
+    cloneImage.remove();
+    timerId = null;
 }
 
 //Функция сохранения корзины
