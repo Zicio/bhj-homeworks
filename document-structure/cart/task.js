@@ -4,7 +4,6 @@ const products = document.querySelector('.products');
 const cartProducts = document.querySelector('.cart__products');
 let addedProducts = cartProducts.querySelectorAll('.cart__product');
 const arr = [];
-let timerId = null;
 
 //Функция показа корзины
 const visibleCart = () => {
@@ -67,6 +66,7 @@ const addProductToCart = (parent) => {
 
 //Функция визуализации перемещения товара в корзину
 const moveImage = (e, parent) => {
+    let timerId = null;
     const image = e.target.closest('.product').querySelector('.product__image'); 
     const imageCoord = image.getBoundingClientRect();
     const cloneImage = image.cloneNode(false);
@@ -93,13 +93,13 @@ const moveImage = (e, parent) => {
             cloneImage.style.left = cloneImageCoord.left + (differenceX / 10) + 'px';
             return;
         }
-        stop(cloneImage);
+        stop(cloneImage, timerId);
     }, 5)
     
 }
 
 //Функция остановки таймера
-const stop = (cloneImage) => {
+const stop = (cloneImage, timerId) => {
     clearTimeout(timerId);
     cloneImage.remove();
     timerId = null;
