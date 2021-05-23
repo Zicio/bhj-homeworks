@@ -33,7 +33,7 @@ document.addEventListener('click', (e) => {
     const targetElement = e.target;
     if (e.target.classList.contains('has-tooltip')) {
         e.preventDefault();
-        if (!e.target.querySelector('.tooltip_active') && !document.querySelector('.tooltip_active')) {
+        if (!document.querySelector('.tooltip_active')) {
             newElement.innerText = `${e.target.title}`;
             e.target.appendChild(newElement);
             getPositionNewElement(targetElement);
