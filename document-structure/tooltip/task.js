@@ -2,7 +2,6 @@
 const hyperlinks = document.querySelectorAll('.has-tooltip');
 const newElement = document.createElement('div');
 newElement.classList.add('tooltip');
-newElement.setAttribute('style', 'position: absolute; width: max-content');
 
 const getPositionNewElement = (targetElement) => {
     newElement.removeAttribute("style");
@@ -33,15 +32,16 @@ document.addEventListener('click', (e) => {
     const targetElement = e.target;
     if (e.target.classList.contains('has-tooltip')) {
         e.preventDefault();
-        if (!document.querySelector('.tooltip_active')) {
-            newElement.innerText = `${e.target.title}`;
-            e.target.appendChild(newElement);
-            getPositionNewElement(targetElement);
-            e.target.querySelector('.tooltip').classList.add('tooltip_active');
+        if (e.target.querySelector('.tooltip_active')) {
+            e.target.querySelector('.tooltip_active').classList.remove('tooltip_active');
             return;
         }
-        if (e.target.querySelector('.tooltip_active')) {
-            e.target.querySelector('.tooltip').classList.remove('tooltip_active');
+        if (document.querySelector('.tooltip_active')) {
+            document.querySelector('.tooltip_active').classList.remove('tooltip_active');
         }
+        newElement.innerText = `${e.target.title}`;
+        e.target.appendChild(newElement);
+        getPositionNewElement(targetElement);
+        e.target.querySelector('.tooltip').classList.add('tooltip_active');
     }
 })
