@@ -9,7 +9,6 @@ const arr = [];
 const visibleCart = () => {
     if(addedProducts.length) {
         return cart.style.visibility = 'visible';
-        
     }
     cart.style.visibility = 'hidden';
 }
@@ -107,8 +106,7 @@ const stop = (cloneImage, timerId) => {
 
 //Функция сохранения корзины
 const saveCart = () => {
-    const saveArr = JSON.stringify(arr);
-    localStorage.setItem('myCart', saveArr);
+    localStorage.setItem('myCart', JSON.stringify(arr));
 }
 
 //Проверка Window.localStorage на наличие сохраненных данных
@@ -132,19 +130,18 @@ if (localStorage.getItem('myCart')) {
 products.addEventListener('click', (e) => {
     if(e.target.classList.contains('product__quantity-control')) {
         changingQuantity(e);
-
     }
 })
 
 //Обработчик кнопки "Добавить в корзину"
 products.addEventListener('click', (e) => {
     const parent = e.target.closest('.product');
-    if(e.target.classList.contains('product__add') && +parent.querySelector('.product__quantity-value').textContent !== 0) {
+    if(e.target.classList.contains('product__add')) {
         addProductToCart(parent);
         visibleCart();
         moveImage(e, parent);
         saveCart();
-        parent.querySelector('.product__quantity-value').innerText = 0;
+        parent.querySelector('.product__quantity-value').innerText = 1;
     }
 })
 

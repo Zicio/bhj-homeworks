@@ -5,7 +5,7 @@ newElement.classList.add('tooltip');
 newElement.setAttribute('style', 'position: absolute; width: max-content');
 
 const getPositionNewElement = (targetElement) => {
-    //newElement.removeAttribute("style");
+    newElement.removeAttribute("style");
     const coord = targetElement.getBoundingClientRect();
     if ((targetElement.dataset.position).localeCompare('top') === 0) {
         newElement.style.left = coord.left +'px';
@@ -33,12 +33,15 @@ document.addEventListener('click', (e) => {
     const targetElement = e.target;
     if (e.target.classList.contains('has-tooltip')) {
         e.preventDefault();
-        newElement.innerText = `${e.target.title}`;
-        getPositionNewElement(targetElement);
-        e.target.appendChild(newElement);
-        const hint = e.target.querySelector('.tooltip');
-        if (e.target.querySelector('.tooltip_active') || !document.querySelector('.tooltip_active')) {
-        hint.classList.toggle('tooltip_active');
+        if (!e.target.querySelector('.tooltip_active') && !document.querySelector('.tooltip_active')) {
+            newElement.innerText = `${e.target.title}`;
+            e.target.appendChild(newElement);
+            getPositionNewElement(targetElement);
+            e.target.querySelector('.tooltip').classList.add('tooltip_active');
+            return;
+        }
+        if (e.target.querySelector('.tooltip_active')) {
+            e.target.querySelector('.tooltip').classList.remove('tooltip_active');
         }
     }
 })
