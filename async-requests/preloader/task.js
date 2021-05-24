@@ -10,8 +10,7 @@ class СurrencyRate {
     }
 
     save() {
-        const jsonArr = JSON.stringify(this.saveArr);
-        localStorage.setItem('mySave', jsonArr);
+        localStorage.setItem('mySave', JSON.stringify(this.saveArr));
     }
 
     addСurrencyRate(arr) {
@@ -80,6 +79,7 @@ class СurrencyRate {
             this.loader.classList.remove('loader_active');
             this.addСurrencyRate(mySave);
             this.start();
+            return;
         }
         this.getСurrencyRate();
         this.start();
