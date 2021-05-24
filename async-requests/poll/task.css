@@ -1,3 +1,11 @@
 body {
   font-family: Arial;
 }
+
+.poll__answers {
+  display: none;
+}
+
+.poll__answers_active {
+  display: block;
+}

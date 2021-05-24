@@ -48,16 +48,17 @@ class Poll {
                 modal.setAttribute('style', 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 5px; border: 1px solid black; border-radius: 10px; z-index: 1000; background: white;');
                 modalSubstrate.setAttribute('style', 'z-index: 1; position: fixed; top:0; left:0; width: 100%; height: 100%; background-color: black; opacity: 0.6;')
                 modalButton.setAttribute('style', 'display: block; margin-left: auto; margin-top: 30px;');
-                this.closeModal(modal, modalButton, modalSubstrate);
+                const selectedResponse = e.target;
+                this.closeModal(modal, modalButton, modalSubstrate, selectedResponse);
             }
-            this.getResults(e.target)
         })
     }
 
-    closeModal(modal, modalButton, modalSubstrate) {
+    closeModal(modal, modalButton, modalSubstrate, selectedResponse) {
         modalButton.addEventListener('click', () => {
             modal.style.display = 'none';
             modalSubstrate.style.display = 'none';
+            this.getResults(selectedResponse);
         })
     }
 
@@ -69,11 +70,16 @@ class Poll {
         xhr.send(`vote=${this.recievedId}&answer=${target.dataset.id}`);
         xhr.addEventListener('readystatechange', () => {
             if (xhr.readyState === xhr.DONE && xhr.status === 200) {
-                for (const element of this.buttons) {
-                    element.remove();
-                }
+                this.pollAnswers.classList.remove('poll__answers_active');
                 const results = xhr.response.stat;
-                console.log(xhr.response.stat);
+                const sumVotes = results.reduce((accumulator, currentValue) => accumulator + currentValue.votes, 0);
+                for (let i = 0; i < results.length; i++) {
+                    this.pollTitle.insertAdjacentHTML('beforeend', 
+                    '<div class="result"></div>');
+                    const resultsList = this.pollTitle.querySelectorAll('.result');
+                    const percent = (results[i].votes / sumVotes * 100).toFixed(2);
+                    resultsList[resultsList.length - 1].innerText = `${results[i].answer}: ${percent}%`;
+                }
             }
         })
     }
