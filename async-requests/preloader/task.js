@@ -18,16 +18,14 @@ class СurrencyRate {
         if (itemsList.length !== arr.length) {
             for (let element of arr) {
                 this.items.insertAdjacentHTML('beforeend', 
-                    '<div class="item" data-id =""><div class="item__code"></div><div class="item__value"></div><div class="item__currency">руб.</div></div>');
+                    '<div class="item" ><div class="item__code"></div><div class="item__value"></div><div class="item__currency">руб.</div></div>');
                 const item = this.items.lastChild;
-                item.dataset.id = arr.indexOf(element);
                 const itemCode = item.querySelector('.item__code');
                 const itemValue = item.querySelector('.item__value');
                 itemCode.innerText = element.CharCode;
                 itemValue.innerText = (+element.Value).toFixed(4);
                 this.saveArr.push(
                     {
-                        id: item.dataset.id,
                         CharCode: itemCode.innerText,
                         Value: itemValue.innerText
                     }
@@ -44,7 +42,6 @@ class СurrencyRate {
             elementValue.innerText = (arr[i].Value).toFixed(4);
             this.saveArr.push(
                 {
-                    id: itemsList[i].dataset.id,
                     CharCode: elementCode.innerText,
                     Value: elementValue.innerText
                 }
@@ -58,12 +55,10 @@ class СurrencyRate {
         xhr.open('GET', 'https://netology-slow-rest.herokuapp.com');
         xhr.responseType ='json';
         xhr.send();
-        xhr.addEventListener('readystatechange', () => {
-            if (xhr.readyState === xhr.DONE && xhr.status === 200) {
-                this.loader.classList.remove('loader_active');
-                const valutes = Object.values(xhr.response.response.Valute);
-                this.addСurrencyRate(valutes);
-            }
+        xhr.addEventListener('load', () => {
+            this.loader.classList.remove('loader_active');
+            const valutes = Object.values(xhr.response.response.Valute);
+            this.addСurrencyRate(valutes);
         }) 
     }
 

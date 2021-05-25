@@ -12,9 +12,9 @@ class Download {
         this.form.addEventListener('submit', (e) => {
             const formData = new FormData(this.form);
             let xhr = new XMLHttpRequest;
-            xhr.upload.onprogress = (event) => {
+            xhr.upload.addEventListener('progress', (event) => {
                 this.progress.value = event.loaded / event.total;
-            }
+            });
             xhr.open('POST', 'https://netology-slow-rest.herokuapp.com/upload.php');
             xhr.send(formData);
             e.preventDefault();

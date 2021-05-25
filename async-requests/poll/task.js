@@ -16,13 +16,11 @@ class Poll {
         xhr.open('GET', 'https://netology-slow-rest.herokuapp.com/poll.php');
         xhr.responseType ='json';
         xhr.send();
-        xhr.addEventListener('readystatechange', () => {
-            if (xhr.readyState === xhr.DONE && xhr.status === 200) {
-                const receivedTitle = xhr.response.data.title;
-                const receivedAnswers = Object.values(xhr.response.data.answers);
-                this.recievedId = xhr.response.id;
-                this.showNewAnswer(receivedTitle, receivedAnswers);
-            }
+        xhr.addEventListener('load', () => {
+            const receivedTitle = xhr.response.data.title;
+            const receivedAnswers = Object.values(xhr.response.data.answers);
+            this.recievedId = xhr.response.id;
+            this.showNewAnswer(receivedTitle, receivedAnswers);
         })
     }
 
@@ -68,18 +66,15 @@ class Poll {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.responseType ='json';
         xhr.send(`vote=${this.recievedId}&answer=${target.dataset.id}`);
-        xhr.addEventListener('readystatechange', () => {
-            if (xhr.readyState === xhr.DONE && xhr.status === 200) {
-                this.pollAnswers.classList.remove('poll__answers_active');
-                const results = xhr.response.stat;
-                const sumVotes = results.reduce((accumulator, currentValue) => accumulator + currentValue.votes, 0);
-                for (let i = 0; i < results.length; i++) {
-                    this.pollTitle.insertAdjacentHTML('beforeend', 
-                    '<div class="result"></div>');
-                    const resultsList = this.pollTitle.querySelectorAll('.result');
-                    const percent = (results[i].votes / sumVotes * 100).toFixed(2);
-                    resultsList[resultsList.length - 1].innerText = `${results[i].answer}: ${percent}%`;
-                }
+        xhr.addEventListener('load', () => {
+            this.pollAnswers.classList.remove('poll__answers_active');
+            const results = xhr.response.stat;
+            const sumVotes = results.reduce((accumulator, currentValue) => accumulator + currentValue.votes, 0);
+            for (let i = 0; i < results.length; i++) {
+                this.pollTitle.insertAdjacentHTML('beforeend', '<div class="result"></div>');
+                const resultsList = this.pollTitle.querySelectorAll('.result');
+                const percent = (results[i].votes / sumVotes * 100).toFixed(2);
+                resultsList[resultsList.length - 1].innerText = `${results[i].answer}: ${percent}%`;
             }
         })
     }
