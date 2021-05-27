@@ -34,7 +34,7 @@ class Auth {
 
     logout() {
         this.logoutButton.addEventListener('click', (e) => {
-            localStorage.clear();
+            localStorage.removeItem('id');
             this.welcome.classList.remove('welcome_active');
             this.form.style.display = 'block';
         })
@@ -42,6 +42,7 @@ class Auth {
 
     sendForm() {
         this.button.addEventListener('click', (e) => {
+            e.preventDefault();
             const formData = new FormData(this.form);
             let xhr = new XMLHttpRequest;
             xhr.open('POST', 'https://netology-slow-rest.herokuapp.com/auth.php');

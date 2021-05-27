@@ -15,7 +15,6 @@ class Editor {
         }
         this.textArea.addEventListener('input', (e) => {
             this.textArea.innerText = e.target.value;
-            localStorage.clear();
             localStorage.text = e.target.value;
         });
     }
@@ -23,7 +22,7 @@ class Editor {
     reset() {
         this.button.addEventListener('click', (e) => {
             this.textArea.value = '';
-            localStorage.clear();
+            localStorage.removeItem('text');
         });
     }
 }
